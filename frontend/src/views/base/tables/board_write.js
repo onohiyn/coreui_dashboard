@@ -1,24 +1,15 @@
 import React, { useState } from 'react'
 import {
-  CCard,
   CCardBody,
   CCardHeader,
   CCol,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CFormSelect,
   CButton,
   CForm,
   CFormInput,
   CFormLabel,
   CFormTextarea,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
 
 import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
@@ -30,41 +21,31 @@ function Write() {
   const history = useHistory()
   const userId = localStorage.getItem('userId')
   const api = httpCommon
+  const formData = new FormData()
+  const boardData = { title: title, text: text, userId: userId }
 
-  const handleChangeTitle = (e) => {
-    setTitle(e.target.value)
-  }
-  const handleChangeText = (e) => {
-    setText(e.target.value)
-  }
-  const onSaveFiles = (e) => {
-    setFile(e.target.file)
-  }
   const handleSubmit = (e) => {
-    Submit({ title, text, userId, file })
+    formData.append('file', file[0])
+    formData.append('board', new Blob([JSON.stringify(boardData)], { type: 'application/json' }))
+    Submit(formData)
     e.preventDefault()
   }
   const header = {
     Connection: 'keep-alive',
     Accept: '*/*',
+    ContentType: 'multipart/form-data',
   }
-  function Submit(title, text, file, userId) {
+
+  function Submit(formData) {
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
-      .post(
-        '/boardWrite',
-        {
-          userId: userId,
-          title: title,
-          text: text,
-          //file: file,
-        },
-        header,
-      )
-      .then((response) => {})
+      .post('/boardWrite', formData, header)
+      .then((response) => {
+        history.push('board')
+      })
       .catch((error) => {
-        //localStorage.clear()
-        //history.push('/login')
+        localStorage.clear()
+        history.push('/login')
       })
   }
 
@@ -83,10 +64,20 @@ function Write() {
                 size="sm"
                 placeholder="제목"
                 aria-label="sm input example"
-                onChange={handleChangeTitle}
+                onChange={(e) => setTitle(e.target.value)}
               />
-              <CFormTextarea id="TextArea" rows="3" onChange={handleChangeText}></CFormTextarea>
-              {/*<CFormInput type="file" multiple id="formFile" onChange={onSaveFiles} />*/}
+
+              <CFormTextarea
+                id="TextArea"
+                rows="3"
+                onChange={(e) => setText(e.target.value)}
+              ></CFormTextarea>
+              <CFormInput
+                type="file"
+                multiple
+                id="file"
+                onChange={(e) => setFile(e.target.files)}
+              />
             </div>
             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
               <CButton type="submit">등록</CButton>

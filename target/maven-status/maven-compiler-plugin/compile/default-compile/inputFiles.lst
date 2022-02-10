@@ -18,6 +18,7 @@
 /Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/service/UserRegisterService.java
 /Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/repository/FileRepository.java
 /Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/config/JwtAuthenticationEntryPoint.java
+/Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/service/BoardService.java
 /Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/repository/UserRepository.java
 /Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/config/JwtTokenUtil.java
 /Users/mhw/Desktop/Workspace/systemCheck/src/main/java/com/systemcheck/entity/JwtRequest.java

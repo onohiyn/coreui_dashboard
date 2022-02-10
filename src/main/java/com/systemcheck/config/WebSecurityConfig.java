@@ -32,9 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
+        // BCryptPasswordEncoder 사용
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 }
 
@@ -52,18 +50,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-        // We don't need CSRF for this example
         httpSecurity.csrf().disable()
-            // dont authenticate this particular request
+            // the request does not require authentication
             .authorizeRequests().antMatchers("/authenticate", "/login", "/signup", "/index.html", "/static/**", "/public/**").permitAll().
-            // all other requests need to be authenticated
-                anyRequest().authenticated().and().
-            // make sure we use stateless session; session won't be used to
-            // store user's state.
+             anyRequest().authenticated().and().
+
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // Add a filter to validate the tokens with every request
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+          httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   CButton,
   CCard,
@@ -13,7 +13,6 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
 
@@ -32,7 +31,7 @@ function Register() {
   }
 
   function Submit({ username, passwd, email, passwdConfirm }) {
-    if (passwd == passwdConfirm) {
+    if (passwd === passwdConfirm) {
       api
         .post('/signup', {
           username: username,
@@ -40,7 +39,7 @@ function Register() {
           email: email,
         })
         .then((response) => {
-          if (response.data.result == 'success') {
+          if (response.data.result === 'success') {
             alert('회원가입 성공! 로그인 페이지로 이동합니다.')
             history.push('/login')
           } else {
@@ -51,14 +50,7 @@ function Register() {
           alert('회원가입 실패!', error)
         })
     } else {
-      alert('비밀번호 오류')
-    }
-  }
-
-  function checkPwd(passwd, passwdConfirm) {
-    if (passwd != passwdConfirm) {
-      setPasswdConfirm('')
-      alert('실패')
+      alert('비밀번호 중복 오류')
     }
   }
 

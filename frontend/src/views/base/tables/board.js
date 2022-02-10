@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CCard,
   CCardBody,
@@ -11,12 +11,7 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CFormSelect,
   CButton,
-  CForm,
-  CFormInput,
-  CFormLabel,
-  CFormTextarea,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 
@@ -24,46 +19,43 @@ import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
 
 function Board() {
-  const [posts, setPosts] = useState('default')
-  const [state, setState] = useState('test')
-  const result = { result: 'dd' }
+  const [result, setResult] = useState([])
   const history = useHistory()
   const api = httpCommon
-
-  const handleChange = (e) => {
-    setState(e.target.value)
-  }
-
-  const handleSubmit = (e) => {
-    SubmitTest(state)
-    e.preventDefault()
-  }
   const header = {
     Connection: 'keep-alive',
     Accept: '*/*',
   }
-  function SubmitTest(props) {
+  const handleClick = () => {
+    history.push('/board_write')
+  }
+
+  function submitApi() {
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
-      .post(
-        '/api/check',
-        {
-          userId: props,
-        },
-        header,
-      )
-      .then((response) => {
-        result.result = response.data.test
-        setPosts(response.data.test)
-      })
+      .post('/boardcontents', {}, header)
+      .then((json) => setResult(json.data))
       .catch((error) => {
-        localStorage.removeItem('token')
+        alert('로그인 후 이용해 주세요')
+        localStorage.clear()
         history.push('/login')
       })
   }
 
-  const handleClick = () => {
-    history.push('/board_write')
+  useEffect(() => {
+    submitApi()
+    return () => {}
+  }, [])
+
+  const rederTable = () => {
+    return result.map((row) => {
+      return (
+        <CTableRow key={row.userId}>
+          <CTableDataCell>{row.userId}</CTableDataCell>
+          <CTableDataCell>{row.title}</CTableDataCell>
+        </CTableRow>
+      )
+    })
   }
 
   return (
@@ -79,11 +71,9 @@ function Board() {
                 <CTableRow>
                   <CTableHeaderCell scope="col">작성자</CTableHeaderCell>
                   <CTableHeaderCell scope="col">제목</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">내용</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">첨부파일</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
-              <CTableBody></CTableBody>
+              <CTableBody>{rederTable()}</CTableBody>
             </CTable>
           </DocsExample>
         </CCardBody>
