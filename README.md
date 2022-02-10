@@ -14,10 +14,14 @@
 - 오른쪽 상단 AppHeaderDropdown 로그아웃 버튼 및 기능 추가
 - 사용자별 로그아웃시 다시 로그인 페이지로 Routing
 - API호출 에러(jwt토큰 만료)시 로그아웃
+4) 게시판 등록 기능
+- 제목, 내용, 첨부파일 추가
+- 첨부파일 추가시 서버 특정경로에 파일 업로드
+- 사용자 ID와 제목만 보여주는 목록 화면
 # 추가 기능 개발 진행 및 개선 필요의 건
 - 브라우저 localstorage 잔여 토큰의 Default Layout 호출시 토큰 유효성 체크
 - 회원가입 사용자 승인시 사용자의 role을 선택하여 승인할 수 있도록 개선 필요
-- 게시판 기능 (사용자ID와 제목, 내용 및 첨부파일을 포함한 게시판 기능)
+- 게시판 조회 기능 (파일 다운로드 및 게시물 조회)
 - 게시판 검색, 페이징 기능
 - 사용자별 마이페이지 및 정보 수정 페이지
 - SSL적용을 위한 Apache 설치 및 연동
@@ -28,7 +32,7 @@
 - user: 사용자 정보 (userId, pwd, role)
 - userSignTmp: 회원가입 정보 (userId, pwd, role, email)
 - board: 게시물 (제목, 내용, 사용자ID)
-- file: 파일정보, 파일위치 정보, 파일용량, UUID
+- file: 파일명, 파일용량, UUID를 포함한 파일명
 # 사용한 기술
 Front: React, CoreUI 템플릿
 Backend: SpringBoot, Spring Security
