@@ -30,8 +30,8 @@ function Userregister() {
     setState(e.target.value)
   }
 
-  const handleProve = (e) => {
-    ProveUser(state)
+  const handleProve = (props, e) => {
+    ProveUser(props)
   }
 
   const header = {
@@ -76,23 +76,15 @@ function Userregister() {
   }, [])
 
   const rederTable = () => {
-    return result.map((row) => {
+    return result.map((row, index) => {
       return (
         <CTableRow key={row.userId}>
-          <CTableHeaderCell scope="row">1</CTableHeaderCell>
-          <CTableDataCell>
-            <CFormCheck
-              type="radio"
-              name="flexRadioDefault"
-              label={row.userId}
-              value={row.userId}
-              onChange={handleChange}
-            />
-          </CTableDataCell>
+          <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
+          <CTableDataCell>{row.userId}</CTableDataCell>
           <CTableDataCell>{row.email}</CTableDataCell>
           <CTableDataCell>
             <CCol xs="auto">
-              <CButton type="button" onClick={handleProve}>
+              <CButton type="button" onClick={(e) => handleProve(row.userId)}>
                 승인
               </CButton>
             </CCol>
@@ -114,7 +106,7 @@ function Userregister() {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell scope="col">No</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">번호</CTableHeaderCell>
                     <CTableHeaderCell scope="col">User ID</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Email </CTableHeaderCell>
                     <CTableHeaderCell scope="col"></CTableHeaderCell>
