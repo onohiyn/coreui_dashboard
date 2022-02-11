@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Document(collection = "board")
@@ -18,20 +19,28 @@ public class BoardEntity implements Serializable {
     private String text;
     private String deleteYN;
     private String fileUUID;
+    private String date;
+    private String time;
 
     @Builder
-    public void BoardEntity (String id, String title, String userId, String text, String deleteYN, String fileUUID ){
-        this._id = id;
-        this.title = title;
+    public BoardEntity(String _id, String userId, String title, String text, String deleteYN, String fileUUID, String date, String time) {
+        this._id = _id;
         this.userId = userId;
+        this.title = title;
         this.text = text;
         this.deleteYN = deleteYN;
         this.fileUUID = fileUUID;
+        this.date = date;
+        this.time = time;
     }
 
-    public BoardEntity()
-    {
+    public BoardEntity() {}
 
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String get_id() {
@@ -80,5 +89,12 @@ public class BoardEntity implements Serializable {
 
     public void setDeleteYN(String deleteYN) {
         this.deleteYN = deleteYN;
+    }
+
+    public String getTime() {
+        return time;
+    }
+    public void setTime(String time) {
+        this.time = time;
     }
 }

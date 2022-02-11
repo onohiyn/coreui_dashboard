@@ -12,6 +12,7 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
+  CFormInput,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 
@@ -52,7 +53,15 @@ function Board() {
       return (
         <CTableRow key={row.userId}>
           <CTableDataCell>{row.userId}</CTableDataCell>
-          <CTableDataCell>{row.title}</CTableDataCell>
+          <CTableDataCell>
+            <CFormInput type="hidden" value={row.id} />
+            <CButton color="link">{row.title}</CButton>
+          </CTableDataCell>
+          <CTableDataCell>
+            {row.date.substring(0, 4) + '년 '}
+            {row.date.substring(4, 6) + '월 '}
+            {row.date.substring(6, 8) + '일'}
+          </CTableDataCell>
         </CTableRow>
       )
     })
@@ -71,6 +80,7 @@ function Board() {
                 <CTableRow>
                   <CTableHeaderCell scope="col">작성자</CTableHeaderCell>
                   <CTableHeaderCell scope="col">제목</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">작성일</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>{rederTable()}</CTableBody>
