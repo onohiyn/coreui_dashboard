@@ -55,6 +55,7 @@ const Syscheck = React.lazy(() => import('./views/base/tables/syscheck'))
 const userregister = React.lazy(() => import('./views/base/tables/userregister'))
 const board = React.lazy(() => import('./views/base/tables/board'))
 const board_write = React.lazy(() => import('./views/base/tables/board_write'))
+const board_detail = React.lazy(() => import('./views/base/tables/board_detail'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -62,6 +63,7 @@ const routes = [
   { path: '/syscheck', name: 'Syscheck', component: Syscheck },
   { path: '/board', name: 'Board', component: board },
   { path: '/board_write', name: 'Write', component: board_write },
+  { path: '/board_detail', name: 'Board Detail', component: board_detail },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },

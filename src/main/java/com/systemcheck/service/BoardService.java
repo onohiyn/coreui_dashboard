@@ -66,6 +66,22 @@ public class BoardService {
         return jsonArray;
     }
 
+    public JSONObject boardDetail(String contentId){
+        JSONObject object = new JSONObject();
+        BoardEntity entity = new BoardEntity();
+        FileEntity fileEntity = new FileEntity();
+        if(entity.getFileUUID() != null) {
+            fileEntity = fileRepository.findByUuid(entity.getFileUUID());
+            object.put("filename", fileEntity.getFileName()); //original file name
+            object.put("fileuuid", entity.getFileUUID());
+        }
+        entity = boardRepository.findBy_id(contentId);
+
+        object.put("title", entity.getTitle());
+        object.put("date", entity.getDate());
+        object.put("text", entity.getText());
+        return object;
+    }
 
 
 }

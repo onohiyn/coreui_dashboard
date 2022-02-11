@@ -53,10 +53,10 @@ public class BoardController {
             String newFileName = "";
             if(requestedFile != null) {
                 newFileName = FILEUUID + file.getOriginalFilename(); // include uuid to prevent overlap
-                fileEntity.setFileName(newFileName);
+                fileEntity.setFileName(file.getOriginalFilename());
                 fileEntity.setFileSize(file.getSize());
                 fileEntity.setContentType(file.getContentType());
-                fileEntity.setUuid(FILEUUID);
+                fileEntity.setUuid(newFileName);
                 File saveFile = new File(fileLocation + newFileName);
                 file.transferTo(saveFile); // save file
                 // save file information
@@ -74,6 +74,12 @@ public class BoardController {
         return jsonArray;
     }
 
+    @RequestMapping(value = "/boarddetail", method= {RequestMethod.POST, RequestMethod.GET})
+    public JSONObject userList(@RequestBody BoardEntity param) throws Exception {
+        JSONObject object = new JSONObject();
+        object = boardService.boardDetail(param.get_id());
+        return object;
+    }
 
 
 

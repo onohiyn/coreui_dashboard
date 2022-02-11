@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface FileRepository extends MongoRepository<FileEntity, String> {
 
-    List<FileEntity> findAllBy(String uuid); //UUID로 파일 검색
+    FileEntity findByUuid(String uuid); //UUID로 파일 검색
 }

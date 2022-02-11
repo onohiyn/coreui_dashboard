@@ -12,7 +12,6 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CFormCheck,
 } from '@coreui/react'
 
 import { DocsExample } from 'src/components'
@@ -22,13 +21,7 @@ import httpCommon from 'src/http-common'
 function Userregister() {
   const history = useHistory()
   const api = httpCommon
-
-  const [state, setState] = useState([])
   const [result, setResult] = useState([])
-
-  const handleChange = (e) => {
-    setState(e.target.value)
-  }
 
   const handleProve = (props, e) => {
     ProveUser(props)
@@ -99,7 +92,7 @@ function Userregister() {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>사용자 승인</strong> <small>Users for register</small>
+            <strong>사용자 승인</strong> <small>User list</small>
           </CCardHeader>
           <CCardBody>
             <DocsExample>

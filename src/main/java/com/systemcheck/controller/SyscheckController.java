@@ -16,7 +16,7 @@ public class SyscheckController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("test", "SUCCESS");
         System.out.println(jsonObject);
-            return jsonObject;
+        return jsonObject;
     }
 
 }

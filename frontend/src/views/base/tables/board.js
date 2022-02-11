@@ -43,19 +43,38 @@ function Board() {
       })
   }
 
+  const handleSubmit = (content, e) => {
+    submitContent(content)
+  }
+
+  function submitContent(props) {
+    history.push({
+      pathname: '/board_detail',
+      state: { detail: props },
+    })
+  }
+
   useEffect(() => {
     submitApi()
     return () => {}
   }, [])
 
   const rederTable = () => {
-    return result.map((row) => {
+    return result.map((row, index) => {
       return (
         <CTableRow key={row.userId}>
+          <CTableDataCell>{index + 1}</CTableDataCell>
           <CTableDataCell>{row.userId}</CTableDataCell>
           <CTableDataCell>
             <CFormInput type="hidden" value={row.id} />
-            <CButton color="link">{row.title}</CButton>
+            <CButton
+              color="link"
+              onClick={(e) => {
+                handleSubmit(row.id, e)
+              }}
+            >
+              {row.title}
+            </CButton>
           </CTableDataCell>
           <CTableDataCell>
             {row.date.substring(0, 4) + '년 '}
@@ -78,6 +97,7 @@ function Board() {
             <CTable>
               <CTableHead>
                 <CTableRow>
+                  <CTableHeaderCell scope="col">번호</CTableHeaderCell>
                   <CTableHeaderCell scope="col">작성자</CTableHeaderCell>
                   <CTableHeaderCell scope="col">제목</CTableHeaderCell>
                   <CTableHeaderCell scope="col">작성일</CTableHeaderCell>

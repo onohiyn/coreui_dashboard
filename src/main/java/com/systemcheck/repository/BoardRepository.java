@@ -14,4 +14,5 @@ public interface BoardRepository extends MongoRepository<BoardEntity, String> {
 
     public BoardEntity findByUserId (String userId);
     public List<BoardEntity> findAll();
+    public BoardEntity findBy_id (String _id);
 }
