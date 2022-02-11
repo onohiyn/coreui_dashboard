@@ -46,6 +46,7 @@ public class BoardService {
             if(list.get(i).getDeleteYN().equalsIgnoreCase("N")) {
                 object.put("userId", list.get(i).getUserId());
                 object.put("title", list.get(i).getTitle());
+                object.put("id", list.get(i).get_id());
                 jsonArray.add(object);
             }
         }

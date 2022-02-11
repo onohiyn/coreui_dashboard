@@ -15,9 +15,9 @@ import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
 
 function Write() {
-  const [title, setTitle] = useState()
-  const [text, setText] = useState()
-  const [file, setFile] = useState()
+  const [title, setTitle] = useState('')
+  const [text, setText] = useState('')
+  const [file, setFile] = useState(null)
   const history = useHistory()
   const userId = localStorage.getItem('userId')
   const api = httpCommon
@@ -25,7 +25,10 @@ function Write() {
   const boardData = { title: title, text: text, userId: userId }
 
   const handleSubmit = (e) => {
-    formData.append('file', file[0])
+    if (file === null) {
+    } else {
+      formData.append('file', file[0])
+    }
     formData.append('board', new Blob([JSON.stringify(boardData)], { type: 'application/json' }))
     Submit(formData)
     e.preventDefault()
@@ -36,16 +39,16 @@ function Write() {
     ContentType: 'multipart/form-data',
   }
 
-  function Submit(formData) {
+  function Submit(props) {
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
-      .post('/boardWrite', formData, header)
+      .post('/boardWrite', props, header)
       .then((response) => {
         history.push('board')
       })
       .catch((error) => {
-        localStorage.clear()
-        history.push('/login')
+        //localStorage.clear()
+        //history.push('/login')
       })
   }
 
@@ -66,7 +69,6 @@ function Write() {
                 aria-label="sm input example"
                 onChange={(e) => setTitle(e.target.value)}
               />
-
               <CFormTextarea
                 id="TextArea"
                 rows="3"

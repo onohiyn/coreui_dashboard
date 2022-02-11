@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -40,27 +41,29 @@ public class BoardController {
     @RequestMapping(value = "/boardWrite", method= {RequestMethod.POST, RequestMethod.GET},
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<?> writeNew(@RequestPart(value = "file", required = false) MultipartFile file, @RequestPart(value = "board", required = false) BoardEntity param) throws IOException {
-
+            MultipartFile requestedFile = null;
+            try{
+                requestedFile = file;
+            }catch(Exception e){
+                System.out.println("No file found");
+            }
             JSONObject jsonObject = new JSONObject();
             FileEntity fileEntity = new FileEntity();
-
             String FILEUUID = UUID.randomUUID().toString();
-            String newFileName = FILEUUID + file.getOriginalFilename(); // include uuid to prevent overlap
-            fileEntity.setFileName(newFileName);
-            fileEntity.setFileSize(file.getSize());
-            fileEntity.setContentType(file.getContentType());
-            fileEntity.setUuid(FILEUUID);
-            File saveFile = new File(fileLocation + newFileName);
-            file.transferTo(saveFile); // save file
-
+            String newFileName = "";
+            if(requestedFile != null) {
+                newFileName = FILEUUID + file.getOriginalFilename(); // include uuid to prevent overlap
+                fileEntity.setFileName(newFileName);
+                fileEntity.setFileSize(file.getSize());
+                fileEntity.setContentType(file.getContentType());
+                fileEntity.setUuid(FILEUUID);
+                File saveFile = new File(fileLocation + newFileName);
+                file.transferTo(saveFile); // save file
+                // save file information
+                boardService.saveFileDetail(fileEntity);
+            }
             // save board contents
             boardService.saveBoardContents(param.getTitle(), param.getText(), newFileName, param.getUserId());
-
-            // save file information
-            boardService.saveFileDetail(fileEntity);
-
-        System.out.println(param.getTitle() + "saved");
-        System.out.println(file.getOriginalFilename() + "saved successfully");
         return ResponseEntity.ok(jsonObject);
     }
 
