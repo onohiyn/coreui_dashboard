@@ -70,13 +70,14 @@ public class BoardService {
         JSONObject object = new JSONObject();
         BoardEntity entity = new BoardEntity();
         FileEntity fileEntity = new FileEntity();
-        if(entity.getFileUUID() != null) {
+        entity = boardRepository.findBy_id(contentId);
+        if(!entity.getFileUUID().isEmpty()) {
             fileEntity = fileRepository.findByUuid(entity.getFileUUID());
             object.put("filename", fileEntity.getFileName()); //original file name
             object.put("fileuuid", entity.getFileUUID());
+        }else{
+            object.put("filename", "파일없음");
         }
-        entity = boardRepository.findBy_id(contentId);
-
         object.put("title", entity.getTitle());
         object.put("date", entity.getDate());
         object.put("text", entity.getText());
