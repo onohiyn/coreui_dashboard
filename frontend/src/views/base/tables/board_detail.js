@@ -1,5 +1,5 @@
-import { React, useEffect, useState, useHistory } from 'react'
-import { useLocation } from 'react-router-dom'
+import { React, useEffect, useState } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
 import {
   CCard,
   CCardBody,
@@ -16,6 +16,7 @@ import { DocsExample } from 'src/components'
 import httpCommon from 'src/http-common'
 
 function Accordion() {
+  const history = useHistory()
   const location = useLocation()
   //const history = useHistory()
   const contentId = location.state.detail
@@ -51,7 +52,7 @@ function Accordion() {
       .catch((error) => {
         alert('로그인 후 이용해 주세요')
         localStorage.clear()
-        //history.push('/login')
+        history.push('/login')
       })
   }
   const handleSubmit = (uuid, e) => {
@@ -77,17 +78,20 @@ function Accordion() {
             .filter((str) => str.includes('filename'))
           if (fileNameMatch) [, fileName] = fileNameMatch.split('=')
         }
+        fileName = fileName.slice(37)
+        fileName = fileName.slice(0, -1)
+        console.log(fileName)
         link.href = url
-        link.setAttribute('download', `${fileName}`)
+        link.setAttribute('download', fileName)
         link.style.cssText = 'display:none'
         document.body.appendChild(link)
         link.click()
         link.remove()
       })
       .catch((error) => {
-        //alert('로그인 후 이용해 주세요')
-        //localStorage.clear()
-        //history.push('/login')
+        alert('로그인 후 이용해 주세요')
+        localStorage.clear()
+        history.push('/login')
       })
   }
 

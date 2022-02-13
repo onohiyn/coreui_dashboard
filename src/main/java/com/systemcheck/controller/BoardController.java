@@ -17,10 +17,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -97,9 +99,14 @@ public class BoardController {
 
             File file = new File(fileFullPath);
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());
-            headers.setAccessControlExposeHeaders(Arrays.asList("Content-Disposition"));
+            String filename = file.getName();
+            filename = UriUtils.encode(filename, StandardCharsets.UTF_8); // 한글 깨짐 현상 - 진행중
+
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(filename).build());
+            headers.setAccessControlExposeHeaders(Arrays.asList("Content-Disposition")); // to axios can accept content-disposition header
             headers.setAccessControlAllowHeaders(Arrays.asList("Content-Disposition"));
+            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM)); // 다운로드 파일 깨짐 현상
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             return new ResponseEntity<>(resource, headers, HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
