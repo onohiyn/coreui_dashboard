@@ -64,8 +64,6 @@ function Accordion() {
       .post('/filedown', { uuid: props }, { responseType: 'blob' }, header) //responseType blob 없을시 파일 용량이 비정상으로 내려옴
       .then((response) => {
         const name = response.headers['content-disposition'].split('fileName=')[1]
-        console.log(response.headers)
-        console.log(name)
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
