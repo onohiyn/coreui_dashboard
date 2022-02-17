@@ -18,7 +18,6 @@ import httpCommon from 'src/http-common'
 function Accordion() {
   const history = useHistory()
   const location = useLocation()
-  //const history = useHistory()
   const contentId = location.state.detail
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
@@ -30,8 +29,8 @@ function Accordion() {
   const header = {
     Connection: 'keep-alive',
     Accept: '*/*',
+    ContentType: 'application/octet-stream',
   }
-
   function submitApi(props) {
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
@@ -60,32 +59,22 @@ function Accordion() {
   }
 
   function fileDownlod(props) {
-    api.responseType = 'blob'
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
-      .post('/filedownload', { uuid: props }, header)
-      .then((res) => {
-        const url = window.URL.createObjectURL(new Blob([res.data]))
-        const link = document.createElement('a')
-        const contentDisposition = res.headers['content-disposition'] // 파일 이름
-        const name = res.headers
+      .post('/filedown', { uuid: props }, { responseType: 'blob' }, header) //responseType blob 없을시 파일 용량이 비정상으로 내려옴
+      .then((response) => {
+        const name = response.headers['content-disposition'].split('fileName=')[1]
+        console.log(response.headers)
         console.log(name)
-        console.log(contentDisposition)
-        let fileName = 'unknown'
-        if (contentDisposition) {
-          const [fileNameMatch] = contentDisposition
-            .split(';')
-            .filter((str) => str.includes('filename'))
-          if (fileNameMatch) [, fileName] = fileNameMatch.split('=')
-        }
-        fileName = fileName.slice(37)
-        fileName = fileName.slice(0, -1)
-        console.log(fileName)
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
         link.href = url
-        link.setAttribute('download', fileName)
+        const filename = decodeURI(name)
+        link.setAttribute('download', filename)
         link.style.cssText = 'display:none'
         document.body.appendChild(link)
         link.click()
+        window.URL.revokeObjectURL(url)
         link.remove()
       })
       .catch((error) => {
@@ -122,7 +111,6 @@ function Accordion() {
                 </CAccordionItem>
                 <CAccordionItem itemKey={1}>
                   <CAccordionHeader>첨부파일</CAccordionHeader>
-
                   {file === '파일없음' ? (
                     <CAccordionBody>{file}</CAccordionBody>
                   ) : (

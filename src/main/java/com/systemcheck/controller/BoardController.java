@@ -8,6 +8,8 @@ import com.systemcheck.repository.BoardRepository;
 import com.systemcheck.repository.FileRepository;
 import com.systemcheck.repository.UserRepository;
 import com.systemcheck.service.BoardService;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,29 +93,30 @@ public class BoardController {
         return object;
     }
 
-
     @CrossOrigin(value = {"*"})
-    @RequestMapping(value = "/filedownload", method= {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<?> fileDownload (@RequestBody FileEntity param) throws Exception {
+    @RequestMapping(value = "/filedown", method= {RequestMethod.POST, RequestMethod.GET}, produces = "application/octet-stream; charset=UTF-8")
+    public void fileDown (@RequestBody FileEntity param, HttpServletResponse response) throws Exception {
         String fileFullPath = fileLocation + param.getUuid();
         try{
             Path filePath = Paths.get(fileFullPath);
-            Resource resource = new InputStreamResource(Files.newInputStream(filePath));
+            FileEntity fileEntity = fileRepository.findByUuid(param.getUuid());
 
-            File file = new File(fileFullPath);
-            HttpHeaders headers = new HttpHeaders();
-            String filename = file.getName();
-            filename = UriUtils.encode(filename, StandardCharsets.UTF_8); // 한글 깨짐 현상 - 진행중
+            if(fileEntity.getContentType().contains("image")){
+                response.setContentType("multipart/form-data");
+            }else{
+                response.setContentType("application/octet-stream");
+            }
+            response.setHeader("Content-Disposition", "attachment; fileName=" + URLEncoder.encode(fileEntity.getFileName(),"UTF-8"));
+            response.setHeader("Content-Transfer-Encoding", "binary");
+            response.setHeader( "Access-Control-Expose-Headers","Content-Disposition");
+            byte[] fileByte = FileUtils.readFileToByteArray(new File(fileFullPath));
 
-            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(filename).build());
-            headers.setAccessControlExposeHeaders(Arrays.asList("Content-Disposition")); // to axios can accept content-disposition header
-            headers.setAccessControlAllowHeaders(Arrays.asList("Content-Disposition"));
-            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM)); // 다운로드 파일 깨짐 현상
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+            response.getOutputStream().write(fileByte);
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+
         } catch(Exception e){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
         }
     }
-
 }
