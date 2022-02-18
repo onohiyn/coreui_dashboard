@@ -7,6 +7,7 @@ import com.systemcheck.service.UserRegisterService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,14 @@ public class ApiController {
     public UserRepository userRepo;
     @Autowired
     public NewUserRepository repo;
-
     @Autowired
     private UserRegisterService service;
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/notAuthorized")
+    public String error() {
+            return "Not Authorized Request";
+    }
 
     @RequestMapping(value = "/api/check", method= {RequestMethod.POST, RequestMethod.GET})
     public JSONObject systemcheck(@RequestBody Map param) throws Exception {

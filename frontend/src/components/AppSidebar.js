@@ -14,7 +14,7 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
-import navigationAdmin from '../_nav_admin'
+import navigationAdmin from '../_nav_dev'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()

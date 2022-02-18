@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -15,7 +15,6 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
 
 function Login() {
@@ -59,7 +58,9 @@ function Login() {
         alert('로그인 실패! ID/PWD 확인해주세요.', error)
       })
   }
-
+  useEffect(() => {
+    localStorage.clear()
+  }, [])
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
