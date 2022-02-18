@@ -18,11 +18,12 @@
 - 제목, 내용, 첨부파일 추가
 - 첨부파일 추가시 서버 특정경로에 파일 업로드
 - 사용자 ID, 제목, 작성일을 보여주는 목록 화면
-- 제목 클릭시 세부 게시물 내용 첨부파일 포함 (진행중)
+- 제목 클릭시 세부 게시물 내용 첨부파일 포함 
+- 파일 업로드 기능 (PC, Smartphone)
+- 파일 다운로드 기능 (PC) - Smartphone 및 브라우저별 분기 처리 필요
 # 추가 기능 개발 진행 및 개선 필요의 건
 - 브라우저 localstorage 잔여 토큰의 Default Layout 호출시 토큰 유효성 체크
 - 회원가입 사용자 승인시 사용자의 role을 선택하여 승인할 수 있도록 개선 필요
-- 게시판 조회 기능 (파일 다운로드 및 게시물 조회)
 - 게시판 검색, 페이징 기능
 - 사용자별 마이페이지 및 정보 수정 페이지
 - SSL적용을 위한 Apache 설치 및 연동
@@ -53,5 +54,8 @@ DB: MongoDB
 회원가입 페이지
 ![스크린샷 2022-02-09 오후 10 55 41](https://user-images.githubusercontent.com/60498178/153215432-bb0dfe99-e5e8-4bcb-a4f2-f0a80e4ae585.png)
 사용자 승인 페이지
-![스크린샷 2022-02-09 오후 10 56 58](https://user-images.githubusercontent.com/60498178/153215648-224435e2-6d00-4578-aef0-281dd43cf696.png)
-
+![스크린샷 2022-02-09 오후 10 56 58](https://user-images.githubusercontent.com/60498178/153215648-224435e2-6d00-4578-aef0-281dd43cf696.png)욧
+게시판 조회 페이지
+![BBE51D46-A730-4D87-9460-A9E8B7E29850_1_201_a](https://user-images.githubusercontent.com/60498178/154390622-77bfa276-1cb3-410f-b0be-cba90d322c24.jpeg)
+게시물 상세 조회 페이지
+![EE5B9820-4B54-4366-9F77-FDF6CC39829A_1_201_a](https://user-images.githubusercontent.com/60498178/154390671-b762b4ce-7e61-4193-8515-78d099c4cf78.jpeg)
