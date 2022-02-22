@@ -9,29 +9,19 @@ import com.systemcheck.repository.FileRepository;
 import com.systemcheck.repository.UserRepository;
 import com.systemcheck.service.BoardService;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriUtils;
-
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -100,12 +90,7 @@ public class BoardController {
         try{
             Path filePath = Paths.get(fileFullPath);
             FileEntity fileEntity = fileRepository.findByUuid(param.getUuid());
-
-            if(fileEntity.getContentType().contains("image")){
-                response.setContentType("multipart/form-data");
-            }else{
-                response.setContentType("application/octet-stream");
-            }
+            response.setContentType("application/octet-stream"); //IOS image file download error
             response.setHeader("Content-Disposition", "attachment; fileName=" + URLEncoder.encode(fileEntity.getFileName(),"UTF-8"));
             response.setHeader("Content-Transfer-Encoding", "binary");
             response.setHeader( "Access-Control-Expose-Headers","Content-Disposition");

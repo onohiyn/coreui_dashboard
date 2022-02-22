@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useState, RNFetchBlob } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import {
   CCard,
@@ -63,6 +63,7 @@ function Accordion() {
     api
       .post('/filedown', { uuid: props }, { responseType: 'blob' }, header) //responseType blob 없을시 파일 용량이 비정상으로 내려옴
       .then((response) => {
+        console.log(window.navigator.appVersion)
         const name = response.headers['content-disposition'].split('fileName=')[1]
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
@@ -76,6 +77,7 @@ function Accordion() {
         link.remove()
       })
       .catch((error) => {
+        console.log(error.message)
         alert('로그인 후 이용해 주세요')
         localStorage.clear()
         history.push('/login')
