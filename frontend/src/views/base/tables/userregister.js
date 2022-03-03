@@ -99,7 +99,7 @@ function Userregister() {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell scope="col">번호</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">No.</CTableHeaderCell>
                     <CTableHeaderCell scope="col">User ID</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Email </CTableHeaderCell>
                     <CTableHeaderCell scope="col"></CTableHeaderCell>
