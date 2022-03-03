@@ -1,6 +1,5 @@
 package com.systemcheck.controller;
 
-
 import com.systemcheck.entity.BoardEntity;
 import com.systemcheck.entity.FileEntity;
 import com.systemcheck.entity.JwtRequest;
@@ -23,7 +22,6 @@ import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-
 
 @RestController
 public class BoardController {
