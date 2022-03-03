@@ -113,7 +113,7 @@ function Login() {
                   <div>
                     <h2>Sign up</h2>
                     <p>신규 회원가입</p>
-                    <p>관리자 승인후 이용하실수 있습니다</p>
+                    <p>관리자 승인까지 기다려 주세요!</p>
                     <Link to="/register">
                       <CButton color="primary" className="mt-3" active tabIndex={-1}>
                         Register Now!
