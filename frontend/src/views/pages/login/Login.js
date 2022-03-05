@@ -50,7 +50,7 @@ function Login() {
         localStorage.setItem('token', accessToken)
         localStorage.setItem('role', role)
         localStorage.setItem('userId', userId)
-        history.push('/dashboard')
+        history.push('/board')
       })
       .catch((error) => {
         console.log(error.response)

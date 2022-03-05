@@ -23,7 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <React.Suspense fallback={loading}>
-        {!isAuthorized ? <Redirect to="/login" /> : <Redirect to="/" />}
+        {!isAuthorized ? <Redirect to="/login" /> : <Redirect to="/board" />}
         <Switch>
           <Route exact path="/login" name="Login Page" render={(props) => <Login {...props} />} />
           <Route

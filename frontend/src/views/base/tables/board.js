@@ -13,6 +13,7 @@ import {
   CTableRow,
   CButton,
   CFormInput,
+  CFormLabel,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 
@@ -21,6 +22,7 @@ import httpCommon from 'src/http-common'
 
 function Board() {
   const [result, setResult] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
   const history = useHistory()
   const api = httpCommon
   const header = {
@@ -93,6 +95,9 @@ function Board() {
           <strong>게시판</strong> <small>게시물</small>
         </CCardHeader>
         <CCardBody>
+          <CCol md={4}>
+            <CFormInput id="search" placeholder="Search"></CFormInput>
+          </CCol>
           <DocsExample>
             <CTable>
               <CTableHead>
