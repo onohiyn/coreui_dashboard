@@ -12,8 +12,8 @@ const AppFooter = () => {
       </div>
       <div className="ms-auto">
         <span className="me-1">검색은 역시</span>
-        <a href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
-          Naver
+        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+          Google
         </a>
       </div>
     </CFooter>
