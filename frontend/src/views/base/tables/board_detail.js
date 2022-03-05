@@ -14,6 +14,8 @@ import {
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 import httpCommon from 'src/http-common'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 function Accordion() {
   const history = useHistory()
@@ -105,10 +107,16 @@ function Accordion() {
           <CCardBody>
             <DocsExample href="components/accordion">
               <CAccordion activeItemKey={1}>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>내용</CAccordionHeader>
-                  <CAccordionBody>{text}</CAccordionBody>
-                </CAccordionItem>
+                <CKEditor
+                  disabled="editDisabled"
+                  editor={ClassicEditor}
+                  data={text}
+                  onReady={(editor) => {
+                    editor.editing.view.change((writer) => {
+                      writer.setStyle('height', '300px', editor.editing.view.document.getRoot())
+                    })
+                  }}
+                ></CKEditor>
                 <CAccordionItem itemKey={1}>
                   <CAccordionHeader>첨부파일</CAccordionHeader>
                   {file === '파일없음' ? (

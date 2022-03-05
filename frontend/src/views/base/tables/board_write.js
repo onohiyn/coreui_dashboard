@@ -13,6 +13,8 @@ import {
 
 import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 function Write() {
   const [title, setTitle] = useState('')
@@ -47,8 +49,8 @@ function Write() {
         history.push('board')
       })
       .catch((error) => {
-        //localStorage.clear()
-        //history.push('/login')
+        localStorage.clear()
+        history.push('/login')
       })
   }
 
@@ -69,11 +71,18 @@ function Write() {
                 aria-label="sm input example"
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <CFormTextarea
-                id="TextArea"
-                rows="3"
-                onChange={(e) => setText(e.target.value)}
-              ></CFormTextarea>
+              <CKEditor
+                editor={ClassicEditor}
+                onReady={(editor) => {
+                  editor.editing.view.change((writer) => {
+                    writer.setStyle('height', '300px', editor.editing.view.document.getRoot())
+                  })
+                }}
+                onChange={(event, editor) => setText(editor.getData())}
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
+              />
+
               <CFormInput
                 type="file"
                 multiple
