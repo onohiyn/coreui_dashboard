@@ -55,10 +55,10 @@ public class UserRegisterService {
         return jsonArray;
     }
 
-    public void updateUser(String userId){
+    public void updateUser(String userId, String role){
         NewUserSign user = newUserRepository.findByUserId(userId);
         User userProve = new User();
-        userProve.setRole("user");
+        userProve.setRole(role);
         userProve.setUserId(userId);
         userProve.setPasswd(user.getPasswd());
         user.setConfirm("Y");

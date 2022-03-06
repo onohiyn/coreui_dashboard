@@ -1,5 +1,6 @@
 package com.systemcheck.controller;
 import com.systemcheck.entity.JwtRequest;
+import com.systemcheck.entity.User;
 import com.systemcheck.repository.NewUserRepository;
 import com.systemcheck.repository.UserRepository;
 import com.systemcheck.service.SystemCheckService;
@@ -62,9 +63,9 @@ public class ApiController {
     }
 
     @RequestMapping(value = "/userprove", method= {RequestMethod.POST, RequestMethod.GET})
-    public String userProve(@RequestBody JwtRequest param) throws Exception {
+    public String userProve(@RequestBody User param) throws Exception {
         JSONArray jsonArray = new JSONArray();
-        service.updateUser(param.getUsername());
+        service.updateUser(param.getUserId(), param.getRole());
         return "jsonArray";
     }
 

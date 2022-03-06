@@ -12,6 +12,7 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
+  CFormCheck,
 } from '@coreui/react'
 
 import { DocsExample } from 'src/components'
@@ -22,9 +23,10 @@ function Userregister() {
   const history = useHistory()
   const api = httpCommon
   const [result, setResult] = useState([])
+  const [role, setRole] = useState('user')
 
-  const handleProve = (props, e) => {
-    ProveUser(props)
+  const handleProve = (props, role, e) => {
+    ProveUser(props, role)
   }
 
   const header = {
@@ -32,13 +34,14 @@ function Userregister() {
     Accept: '*/*',
   }
 
-  function ProveUser(props) {
+  function ProveUser(props, role) {
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
       .post(
         '/userprove',
         {
-          username: props,
+          userId: props,
+          role: role,
         },
         header,
       )
@@ -76,8 +79,25 @@ function Userregister() {
           <CTableDataCell>{row.userId}</CTableDataCell>
           <CTableDataCell>{row.email}</CTableDataCell>
           <CTableDataCell>
+            <CFormCheck
+              type="radio"
+              name={index}
+              value="admin"
+              label="Y"
+              onChange={(e) => setRole('admin')}
+            />
+            <CFormCheck
+              type="radio"
+              name={index}
+              value="user"
+              label="N"
+              onChange={(e) => setRole('user')}
+              defaultChecked
+            />
+          </CTableDataCell>
+          <CTableDataCell>
             <CCol xs="auto">
-              <CButton type="button" onClick={(e) => handleProve(row.userId)}>
+              <CButton type="button" onClick={(e) => handleProve(row.userId, role)}>
                 승인
               </CButton>
             </CCol>
@@ -102,6 +122,7 @@ function Userregister() {
                     <CTableHeaderCell scope="col">No.</CTableHeaderCell>
                     <CTableHeaderCell scope="col">User ID</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Email </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Admin</CTableHeaderCell>
                     <CTableHeaderCell scope="col"></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>

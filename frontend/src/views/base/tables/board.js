@@ -13,7 +13,9 @@ import {
   CTableRow,
   CButton,
   CFormInput,
-  CFormLabel,
+  CInputGroup,
+  CInputGroupText,
+  CFormSelect,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 
@@ -95,10 +97,22 @@ function Board() {
           <strong>게시판</strong> <small>게시물</small>
         </CCardHeader>
         <CCardBody>
-          <CCol md={4}>
-            <CFormInput id="search" placeholder="Search"></CFormInput>
-          </CCol>
           <DocsExample>
+            <CRow className="g-3">
+              <CInputGroup size="sm" className="mb-3">
+                <CCol md={1.5}>
+                  <CFormSelect id="inputGroupSelect01">
+                    <option>선택</option>
+                    <option value="1">제목</option>
+                    <option value="2">작성자</option>
+                  </CFormSelect>
+                </CCol>
+                <CCol md={4}>
+                  <CFormInput id="search" placeholder="Search"></CFormInput>
+                </CCol>
+              </CInputGroup>
+            </CRow>
+
             <CTable>
               <CTableHead>
                 <CTableRow>
