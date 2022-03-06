@@ -24,7 +24,8 @@ import httpCommon from 'src/http-common'
 
 function Board() {
   const [result, setResult] = useState([])
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState([])
+  const [searchTopic, setSearchTopic] = useState('title')
   const history = useHistory()
   const api = httpCommon
   const header = {
@@ -64,30 +65,46 @@ function Board() {
   }, [])
 
   const rederTable = () => {
-    return result.map((row, index) => {
-      return (
-        <CTableRow key={row.userId}>
-          <CTableDataCell>{index + 1}</CTableDataCell>
-          <CTableDataCell>{row.userId}</CTableDataCell>
-          <CTableDataCell>
-            <CFormInput type="hidden" value={row.id} />
-            <CButton
-              color="link"
-              onClick={(e) => {
-                handleSubmit(row.id, e)
-              }}
-            >
-              {row.title}
-            </CButton>
-          </CTableDataCell>
-          <CTableDataCell>
-            {row.date.substring(0, 4) + '년 '}
-            {row.date.substring(4, 6) + '월 '}
-            {row.date.substring(6, 8) + '일'}
-          </CTableDataCell>
-        </CTableRow>
-      )
-    })
+    return result
+      .filter((val) => {
+        if (searchTerm == '') {
+          return val
+        } else if (
+          searchTopic == 'title' &&
+          val.title.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+          return val
+        } else if (
+          searchTopic == 'userId' &&
+          val.userId.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+          return val
+        }
+      })
+      .map((row, index) => {
+        return (
+          <CTableRow key={index}>
+            <CTableDataCell>{index + 1}</CTableDataCell>
+            <CTableDataCell>{row.userId}</CTableDataCell>
+            <CTableDataCell>
+              <CFormInput type="hidden" value={row.id} />
+              <CButton
+                color="link"
+                onClick={(e) => {
+                  handleSubmit(row.id, e)
+                }}
+              >
+                {row.title}
+              </CButton>
+            </CTableDataCell>
+            <CTableDataCell>
+              {row.date.substring(0, 4) + '년 '}
+              {row.date.substring(4, 6) + '월 '}
+              {row.date.substring(6, 8) + '일'}
+            </CTableDataCell>
+          </CTableRow>
+        )
+      })
   }
 
   return (
@@ -101,14 +118,22 @@ function Board() {
             <CRow className="g-3">
               <CInputGroup size="sm" className="mb-3">
                 <CCol md={1.5}>
-                  <CFormSelect id="inputGroupSelect01">
-                    <option>선택</option>
-                    <option value="1">제목</option>
-                    <option value="2">작성자</option>
+                  <CFormSelect
+                    id="inputGroupSelect01"
+                    onChange={(e) => setSearchTopic(e.target.value)}
+                  >
+                    <option value="title">제목</option>
+                    <option value="userId">작성자</option>
                   </CFormSelect>
                 </CCol>
                 <CCol md={4}>
-                  <CFormInput id="search" placeholder="Search"></CFormInput>
+                  <CFormInput
+                    id="search"
+                    placeholder="Search"
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                    }}
+                  ></CFormInput>
                 </CCol>
               </CInputGroup>
             </CRow>
