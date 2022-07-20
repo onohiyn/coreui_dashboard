@@ -1,4 +1,5 @@
 package com.systemcheck.controller;
+import com.systemcheck.entity.CoffeeOrder;
 import com.systemcheck.entity.JwtRequest;
 import com.systemcheck.entity.User;
 import com.systemcheck.repository.NewUserRepository;
@@ -69,6 +70,15 @@ public class ApiController {
         return "jsonArray";
     }
 
+    @RequestMapping(value = "/coffee/order", method= {RequestMethod.POST, RequestMethod.GET})
+    public JSONArray coffeeOrder(@RequestBody CoffeeOrder param) throws Exception {
+        JSONArray jsonArray = new JSONArray();
+
+        for(CoffeeOrder orders : param.getOrders()){
+            jsonArray.add(param);
+        }
+        return jsonArray;
+    }
 
 
 }
