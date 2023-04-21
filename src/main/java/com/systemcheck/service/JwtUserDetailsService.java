@@ -30,6 +30,16 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
     }
 
+    public String userNameByUserId(String userId) throws UsernameNotFoundException {
+        com.systemcheck.entity.User usertmp = userRepository.findByUserId(userId);
+        String userName = usertmp.getUserName();
+
+        if(userName == null) {
+            userName = "닉네임 없음";
+        }
+            return userName;
+    }
+
     public String userRoleByUserId(String userId) throws UsernameNotFoundException {
         com.systemcheck.entity.User usertmp = userRepository.findByUserId(userId);
         String role = usertmp.getRole();

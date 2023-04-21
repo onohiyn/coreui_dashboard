@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CCard,
   CCardBody,
@@ -15,105 +15,160 @@ import {
   CButton,
   CForm,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
 
 import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
+import { motion } from 'framer-motion'
+import { DocsExample } from 'src/components'
+import './style.css'
 
-function Syscheck1() {
-  const [posts, setPosts] = useState('default')
-  const [state, setState] = useState('test')
-  const result = { result: 'dd' }
+function Syscheck() {
+  const [system, setSystem] = useState(['select'])
+  const [result, setResult] = useState([])
+
   const history = useHistory()
   const api = httpCommon
 
-  const handleChange = (e) => {
-    setState(e.target.value)
+  const handleChange = (event) => {
+    setSystem(event.target.value)
   }
 
   const handleSubmit = (e) => {
-    SubmitTest(state)
-    e.preventDefault()
+    if (system === 'select') {
+      alert('시스템을 선택해주세요')
+    } else {
+      Submit(system)
+    }
   }
   const header = {
     Connection: 'keep-alive',
     Accept: '*/*',
   }
-  function SubmitTest(props) {
+
+  const draw = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i) => {
+      const delay = 1 + i * 0.5
+      return {
+        pathLength: 1,
+        opacity: 1,
+        transition: {
+          pathLength: { delay, type: 'spring', duration: 1.5, bounce: 0 },
+          opacity: { delay, duration: 0.01 },
+        },
+      }
+    },
+  }
+
+  function Submit(props) {
     api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
     api
       .post(
-        '/api/check',
+        '/check',
         {
-          userId: props,
+          system: props,
         },
         header,
       )
-      .then((response) => {
-        result.result = response.data.test
-        setPosts(response.data.test)
-      })
+      .then((json) => setResult(json.data))
       .catch((error) => {
-        localStorage.removeItem('token')
-        history.push('/login')
+        alert('시스템 호출 에러')
       })
+  }
+
+  const renderTable = () => {
+    return result.map((row, index) => {
+      return (
+        <CTableRow key={row.system}>
+          <CTableDataCell scope="row">{index + 1}</CTableDataCell>
+          <CTableDataCell>{row.system}</CTableDataCell>
+          <CTableDataCell>{row.meantime}</CTableDataCell>
+          <CTableDataCell>{row.status}</CTableDataCell>
+          <CTableDataCell>
+            {row.status === '200 OK' ? (
+              <motion.svg
+                width="30"
+                height="30"
+                viewBox="0 0 100 100"
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.circle cx="50" cy="50" r="40" stroke="#0099ff" variants={draw} custom={1} />
+              </motion.svg>
+            ) : (
+              <motion.svg
+                width="30"
+                height="30"
+                viewBox="0 0 100 100"
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.line
+                  x1="15"
+                  y1="20"
+                  x2="85"
+                  y2="85"
+                  stroke="#ff0055"
+                  variants={draw}
+                  custom={2}
+                />
+                <motion.line
+                  x1="15"
+                  y1="85"
+                  x2="85"
+                  y2="20"
+                  stroke="#ff0055"
+                  variants={draw}
+                  custom={2.5}
+                />
+              </motion.svg>
+            )}
+          </CTableDataCell>
+        </CTableRow>
+      )
+    })
   }
 
   return (
     <CRow>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>System Check</strong> <small>was check</small>
-          </CCardHeader>
-          <CCardBody>
-            <DocsExample>
-              <CForm className="row gy-2 gx-3 align-items-center" onSubmit={handleSubmit}>
-                <CCol xs="auto">
-                  <CFormSelect id="autoSizingSelect" value={state.value} onChange={handleChange}>
-                    <option defaultValue="Test">Test</option>
-                    <option>Prod</option>
-                  </CFormSelect>
-                </CCol>
-                <CCol xs="auto">
-                  <CButton type="submit">Submit</CButton>
-                </CCol>
-              </CForm>
-              <CCol xs="auto"></CCol>
-              <CTable>
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell scope="col">{posts}</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">{state}</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">{result.result}</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">ss</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  <CTableRow>
-                    <CTableHeaderCell scope="row">1</CTableHeaderCell>
-                    <CTableDataCell>Mark</CTableDataCell>
-                    <CTableDataCell>Otto</CTableDataCell>
-                    <CTableDataCell>@mdo</CTableDataCell>
-                  </CTableRow>
-                  <CTableRow>
-                    <CTableHeaderCell scope="row">2</CTableHeaderCell>
-                    <CTableDataCell>Jacob</CTableDataCell>
-                    <CTableDataCell>Thornton</CTableDataCell>
-                    <CTableDataCell>@fat</CTableDataCell>
-                  </CTableRow>
-                  <CTableRow>
-                    <CTableHeaderCell scope="row">3</CTableHeaderCell>
-                    <CTableDataCell colSpan="2">Larry the Bird</CTableDataCell>
-                    <CTableDataCell>@twitter</CTableDataCell>
-                  </CTableRow>
-                </CTableBody>
-              </CTable>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
+      <CCard className="mb-4">
+        <CCardHeader>
+          <strong>미들웨어 점검</strong>
+        </CCardHeader>
+        <CCardBody>
+          <CForm className="row gx-3 gy-2 align-items-center">
+            <CCol xs="auto">
+              <CFormSelect id="autoSizingSelect" onChange={handleChange}>
+                <option value="select" selected>
+                  Select System
+                </option>
+                <option value="test">Test</option>
+                <option value="prod">Prod</option>
+              </CFormSelect>
+            </CCol>
+            <CCol xs="auto">
+              <CButton color="dark" onClick={handleSubmit}>
+                submit
+              </CButton>
+            </CCol>
+          </CForm>
+        </CCardBody>
+        <CCardBody>
+          <CTable>
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell scope="col">No.</CTableHeaderCell>
+                <CTableHeaderCell scope="col">System</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Latency</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                <CTableHeaderCell scope="col"></CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody> {renderTable()}</CTableBody>
+          </CTable>
+        </CCardBody>
+      </CCard>
     </CRow>
   )
 }
-export default Syscheck1
+export default Syscheck

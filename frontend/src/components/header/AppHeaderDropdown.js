@@ -1,96 +1,60 @@
-import React from 'react'
+import React, { useCallback, useRef, useState, useEffect } from 'react'
 import {
   CAvatar,
   CBadge,
   CButton,
   CDropdown,
   CDropdownDivider,
-  CDropdownHeader,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react'
-import {
-  cilBell,
-  cilCreditCard,
-  cilCommentSquare,
-  cilEnvelopeOpen,
-  cilFile,
-  cilLockLocked,
-  cilSettings,
-  cilTask,
-  cilUser,
-} from '@coreui/icons'
+import { cilFile, cilLockLocked } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-
-import reactIcon from './../../assets/images/avatars/React-icon.svg'
-
-const handleClick = () => {
-  localStorage.clear()
-  pageload()
-}
-const pageload = () => {
-  window.location.href = '/index.html'
-}
-
+import { useHistory } from 'react-router-dom'
+import httpCommon from 'src/http-common'
+import reactIcon from './../../assets/images/avatars/shinhan.png'
 const AppHeaderDropdown = () => {
+  const history = useHistory()
+  const client = useRef({})
+  const currentUserName = localStorage.getItem('userName')
+  const api = httpCommon
+  const header = {
+    Connection: 'keep-alive',
+    Accept: '*/*',
+  }
+
+  const handleClick = () => {
+    submitApi()
+    localStorage.clear()
+    pageload()
+  }
+
+  function submitApi() {
+    api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
+    api
+      .post('/byebye', { userName: currentUserName }, header)
+      .then(console.log('logout'))
+      .catch((error) => {
+        alert('로그인 후 이용해 주세요')
+        localStorage.clear()
+        history.push('/login')
+      })
+  }
+
+  const pageload = () => {
+    window.location.href = '/index.html'
+  }
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
         <CAvatar src={reactIcon} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
-        <CDropdownItem href="">
-          <CIcon icon={cilBell} className="me-2" />
-          Updates
-          <CBadge color="info" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="">
-          <CIcon icon={cilEnvelopeOpen} className="me-2" />
-          Messages
-          <CBadge color="success" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="">
-          <CIcon icon={cilTask} className="me-2" />
-          Tasks
-          <CBadge color="danger" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="">
-          <CIcon icon={cilCommentSquare} className="me-2" />
-          Comments
-          <CBadge color="warning" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
-        <CDropdownItem href="">
-          <CIcon icon={cilUser} className="me-2" />
-          Profile
-        </CDropdownItem>
-        <CDropdownItem href="">
-          <CIcon icon={cilSettings} className="me-2" />
-          Settings
-        </CDropdownItem>
-        <CDropdownItem href="">
-          <CIcon icon={cilCreditCard} className="me-2" />
-          Payments
-          <CBadge color="secondary" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
         <CDropdownItem href="">
           <CIcon icon={cilFile} className="me-2" />
-          Projects
-          <CBadge color="primary" className="ms-2">
-            42
-          </CBadge>
+          Settings
         </CDropdownItem>
         <CDropdownDivider />
         <CDropdownItem>

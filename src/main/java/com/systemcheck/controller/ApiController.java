@@ -1,9 +1,8 @@
 package com.systemcheck.controller;
-import com.systemcheck.entity.CoffeeOrder;
-import com.systemcheck.entity.JwtRequest;
-import com.systemcheck.entity.User;
+import com.systemcheck.entity.*;
 import com.systemcheck.repository.NewUserRepository;
 import com.systemcheck.repository.UserRepository;
+import com.systemcheck.service.BoardService;
 import com.systemcheck.service.SystemCheckService;
 import com.systemcheck.service.UserRegisterService;
 import org.json.simple.JSONArray;
@@ -48,7 +47,11 @@ public class ApiController {
     public ResponseEntity<?> signupUser(@RequestBody JwtRequest param) throws Exception {
         JSONObject jsonObject = new JSONObject();
      if(service.checkUserId(param.getUsername())){
-         service.insertUserTmp(param);
+         if(param.getUsername().equalsIgnoreCase("admin")){
+             service.insertAdmin("admin");
+         }else{
+             service.insertUserTmp(param);
+         }
          jsonObject.put("result", "success");
      }else {
          jsonObject.put("result", "fail");
@@ -63,10 +66,30 @@ public class ApiController {
         return jsonArray;
     }
 
+    @RequestMapping(value = "/userall", method= {RequestMethod.POST, RequestMethod.GET})
+    public JSONArray userAll(@RequestBody JwtRequest param) throws Exception {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray = service.userAllList();
+        return jsonArray;
+    }
+
+    @RequestMapping(value = "/userdelete", method= {RequestMethod.POST, RequestMethod.GET})
+    public void userDelete(@RequestBody User param) throws Exception {
+        service.deleteUser(param.getUserId());
+    }
+
     @RequestMapping(value = "/userprove", method= {RequestMethod.POST, RequestMethod.GET})
     public String userProve(@RequestBody User param) throws Exception {
         JSONArray jsonArray = new JSONArray();
         service.updateUser(param.getUserId(), param.getRole());
+        return "jsonArray";
+    }
+
+    @RequestMapping(value = "/useredit", method= {RequestMethod.POST, RequestMethod.GET})
+    public String userEdit(@RequestBody User param) throws Exception {
+        JSONArray jsonArray = new JSONArray();
+        System.out.println(param.getUserName());
+        service.editUser(param);
         return "jsonArray";
     }
 
@@ -79,6 +102,8 @@ public class ApiController {
         }
         return jsonArray;
     }
+
+
 
 
 }

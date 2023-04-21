@@ -10,8 +10,10 @@ public class JwtResponse implements Serializable {
     private final String role;
     private final String userId;
 
-    public JwtResponse(String jwttoken, String refreshtoken, String role, String userId) {
-        this.jwttoken = jwttoken; this.refreshtoken = refreshtoken; this.role = role; this.userId = userId;
+    private final String userName;
+
+    public JwtResponse(String jwttoken, String refreshtoken, String role, String userId, String userName) {
+        this.jwttoken = jwttoken; this.refreshtoken = refreshtoken; this.role = role; this.userId = userId; this.userName = userName;
     }
     public String getToken() {
         return this.jwttoken;
@@ -22,4 +24,6 @@ public class JwtResponse implements Serializable {
     public String getUserId(){
         return this.userId;
     }
+
+    public String getUserName() {return this.userName;}
 }

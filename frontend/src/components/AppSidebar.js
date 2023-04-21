@@ -1,9 +1,9 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
+import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler, CAvatar } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cibReact } from '@coreui/icons'
+import { cilStar, cilSun, cilMoon } from '@coreui/icons'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
@@ -14,7 +14,8 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
-import navigationAdmin from '../_nav_admin'
+import navigationAdmin from '../_nav'
+//import reactIcon from './../assets/images/avatars/shin2.png'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -32,8 +33,11 @@ const AppSidebar = () => {
       }}
     >
       <CSidebarBrand className="d-none d-md-flex" to="/">
-        <CIcon className="sidebar-brand-full" icon={cibReact} height={30} />
-        <pre> </pre>Moons Dashboard
+        <CIcon icon={cilStar} />
+        <pre> </pre>
+        <CIcon icon={cilSun} />
+        <pre> </pre>
+        <CIcon icon={cilMoon} />
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>
       <CSidebarNav>

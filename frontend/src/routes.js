@@ -51,8 +51,13 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 // Custom
 
-const Syscheck = React.lazy(() => import('./views/base/tables/syscheck'))
+const syscheck = React.lazy(() => import('./views/base/tables/syscheck'))
+const monitoring = React.lazy(() => import('./views/base/tables/monitoring'))
+const chat = React.lazy(() => import('./views/base/tables/chat'))
+const systemregister = React.lazy(() => import('./views/base/tables/systemregister'))
+const linkregister = React.lazy(() => import('./views/base/tables/linkregister'))
 const userregister = React.lazy(() => import('./views/base/tables/userregister'))
+const userall = React.lazy(() => import('./views/base/tables/userall'))
 const board = React.lazy(() => import('./views/base/tables/board'))
 const board_write = React.lazy(() => import('./views/base/tables/board_write'))
 const board_detail = React.lazy(() => import('./views/base/tables/board_detail'))
@@ -60,7 +65,12 @@ const board_detail = React.lazy(() => import('./views/base/tables/board_detail')
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/userregister', name: 'User Register', component: userregister },
-  { path: '/syscheck', name: 'Syscheck', component: Syscheck },
+  { path: '/userall', name: 'User List', component: userall },
+  { path: '/chat', name: 'Chat', component: chat },
+  { path: '/syscheck', name: 'Syscheck', component: syscheck },
+  { path: '/monitoring', name: 'Monitoring', component: monitoring },
+  { path: '/systemregister', name: 'System Register', component: systemregister },
+  { path: '/linkregister', name: 'System Register', component: linkregister },
   { path: '/board', name: 'Board', component: board },
   { path: '/board_write', name: 'Write', component: board_write },
   { path: '/board_detail', name: 'Board Detail', component: board_detail },

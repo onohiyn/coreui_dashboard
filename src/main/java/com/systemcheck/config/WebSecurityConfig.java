@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
         httpSecurity.csrf().disable()
             // the request does not require authentication
-            .authorizeRequests().antMatchers("/","/authenticate", "/login", "/signup", "/index.html", "/static/**", "/public/**", "/coffee/order").permitAll().
+            .authorizeRequests().antMatchers("/","/kafka","/authenticate","/login","/signup","/ws/**","/index.html", "/static/**", "/public/**", "/coffee/order","/manifest.json","/favicon.ico").permitAll().
              anyRequest().authenticated().and().
 
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

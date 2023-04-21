@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootApplication
+
 @Configuration
 @RunWith(SpringRunner.class)
 public class Application {

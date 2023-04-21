@@ -14,19 +14,22 @@ import {
   CButton,
   CFormInput,
   CInputGroup,
-  CInputGroupText,
   CFormSelect,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
-
 import { useHistory } from 'react-router-dom'
 import httpCommon from 'src/http-common'
+import Pagination from './pagination'
 
 function Board() {
   const [result, setResult] = useState([])
   const [searchTerm, setSearchTerm] = useState([])
   const [searchTopic, setSearchTopic] = useState('title')
   const history = useHistory()
+  const [limit, setLimit] = useState(10)
+  const [page, setPage] = useState(1)
+  const offset = (page - 1) * limit
+  const [resultIndex, setResultIndex] = useState(Object.keys(result).length)
   const api = httpCommon
   const header = {
     Connection: 'keep-alive',
@@ -58,6 +61,38 @@ function Board() {
       state: { detail: props },
     })
   }
+  function handleDelete(props, userId) {
+    if (window.confirm('삭제')) {
+      if (userId == localStorage.getItem('userId') || userId == 'admin') {
+        Delete(props)
+      } else {
+        alert('권한없음')
+      }
+    } else {
+    }
+  }
+  function Delete(props) {
+    api.defaults.headers.common[`Authorization`] = 'Bearer ' + localStorage.getItem('token')
+    api
+      .post(
+        '/boardDelete',
+        {
+          _id: props,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Connection: 'keep-alive',
+            Accept: '*/*',
+          },
+        },
+      )
+      .then(submitApi)
+      .catch((error) => {
+        localStorage.clear()
+        history.push('/login')
+      })
+  }
 
   useEffect(() => {
     submitApi()
@@ -81,6 +116,7 @@ function Board() {
           return val
         }
       })
+      .slice(offset, offset + limit)
       .map((row, index) => {
         return (
           <CTableRow key={index}>
@@ -102,6 +138,16 @@ function Board() {
               {row.date.substring(4, 6) + '월 '}
               {row.date.substring(6, 8) + '일'}
             </CTableDataCell>
+            <CTableDataCell>
+              <CButton
+                color="danger"
+                onClick={(e) => {
+                  handleDelete(row.id, row.userId)
+                }}
+              >
+                삭제
+              </CButton>
+            </CTableDataCell>
           </CTableRow>
         )
       })
@@ -111,7 +157,7 @@ function Board() {
     <CRow>
       <CCard className="mb-4">
         <CCardHeader>
-          <strong>게시판</strong> <small>게시물</small>
+          <strong>게시판</strong> <small>list</small>
         </CCardHeader>
         <CCardBody>
           <DocsExample>
@@ -137,7 +183,6 @@ function Board() {
                 </CCol>
               </CInputGroup>
             </CRow>
-
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -149,15 +194,19 @@ function Board() {
               </CTableHead>
               <CTableBody>{rederTable()}</CTableBody>
             </CTable>
+            <Pagination
+              resultIndex={result.length}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+            ></Pagination>
+            <CCol>
+              <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                <CButton onClick={handleClick}> 글쓰기</CButton>
+              </div>
+            </CCol>
           </DocsExample>
         </CCardBody>
-        <CCol>
-          <DocsExample href="components/buttons#block-buttons">
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-              <CButton onClick={handleClick}> 글쓰기</CButton>
-            </div>
-          </DocsExample>
-        </CCol>
       </CCard>
     </CRow>
   )

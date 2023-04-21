@@ -17,7 +17,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 function Write() {
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState('제목 없음')
   const [text, setText] = useState('')
   const [file, setFile] = useState(null)
   const history = useHistory()

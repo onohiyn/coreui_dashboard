@@ -30,38 +30,26 @@ const AppHeader = () => {
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
-          Moons Dashboard
+          Dashboard
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink} activeClassName="active">
-              Dashboard
+            <CNavLink to="/board" component={NavLink} activeClassName="active">
+              Board
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="/">Users</CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="/">Settings</CNavLink>
-          </CNavItem>
-        </CHeaderNav>
-        <CHeaderNav>
-          <CNavItem>
-            <CNavLink href="/">
-              <CIcon icon={cilBell} size="lg" />
+            <CNavLink to="/syscheck" component={NavLink} activeClassName="active">
+              SystemCheck
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="/">
-              <CIcon icon={cilList} size="lg" />
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="/">
-              <CIcon icon={cilEnvelopeOpen} size="lg" />
+            <CNavLink to="/linkregister" component={NavLink} activeClassName="active">
+              Links
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
+        <CHeaderNav></CHeaderNav>
         <CHeaderNav className="ms-3">
           <AppHeaderDropdown />
         </CHeaderNav>

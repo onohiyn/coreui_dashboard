@@ -7,6 +7,7 @@ import com.systemcheck.repository.FileRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -50,9 +51,17 @@ public class BoardService {
         fileRepository.save(fileEntity);
     }
 
+    public void deleteContents(String id){
+        BoardEntity entity = new BoardEntity();
+        entity = boardRepository.findBy_id(id);
+        entity.setDeleteYN("Y");
+        boardRepository.save(entity);
+    }
+
     public JSONArray boardContents(){
         JSONArray jsonArray = new JSONArray();
-        List<BoardEntity> list = boardRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        List<BoardEntity> list = boardRepository.findAll(sort);
         for(int i =0; i<list.size(); i++){
             JSONObject object = new JSONObject();
             if(list.get(i).getDeleteYN().equalsIgnoreCase("N")) {

@@ -37,6 +37,12 @@ public class BoardController {
     @Value("${file.location}")
     private String fileLocation;
 
+    @CrossOrigin(value = {"*"})
+    @RequestMapping(value = "/boardDelete", method= {RequestMethod.POST, RequestMethod.GET})
+    public void deleteBoard(@RequestBody BoardEntity entity) throws Exception {
+        boardService.deleteContents(entity.get_id());
+    }
+
     @PostMapping(consumes = {"multipart/form-data"})
     @RequestMapping(value = "/boardWrite", method= {RequestMethod.POST, RequestMethod.GET},
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
@@ -74,6 +80,7 @@ public class BoardController {
         return jsonArray;
     }
 
+    @CrossOrigin(value = {"*"})
     @RequestMapping(value = "/boarddetail", method= {RequestMethod.POST, RequestMethod.GET})
     public JSONObject userList(@RequestBody BoardEntity param) throws Exception {
         JSONObject object = new JSONObject();
@@ -102,4 +109,5 @@ public class BoardController {
 
         }
     }
+
 }

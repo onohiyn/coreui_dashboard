@@ -17,13 +17,15 @@ public class User {
     private String userId;
     private String passwd;
     private String role;
+    private String userName;
 
     @Builder
-    public void UserCollection (String id, String userId, String passwd, String role ){
+    public void UserCollection (String id, String userId, String passwd, String role, String userName ){
         this._id = id;
         this.userId = userId;
         this.passwd = passwd;
         this.role = role;
+        this.userName = userName;
     }
 
 

@@ -20,4 +20,8 @@ public class CoffeeOrder {
         this.menuId = menuId;
         this.amount = amount;
     }
+
+    public CoffeeOrder() {
+
+    }
 }
